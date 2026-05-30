@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RYLNA — Espace de gestion</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#B8843A;--gold-l:#D4A660;--gold-pale:#F7EDD8;--gold-bg:#FBF5EB;
+  --w:#FFFFFF;--bg:#F2EEE8;--bg2:#E8E2D8;
+  --t:#1A1714;--t2:#4A4540;--mu:#8A8580;
+  --bdr:rgba(184,132,58,0.18);--bdr2:rgba(184,132,58,0.3);
+  --green:#2D9E6B;--green-bg:#EAF7F0;
+  --orange:#D97A2A;--orange-bg:#FDF1E4;
+  --red:#C0392B;--red-bg:#FDEDED;
+  --blue:#2A6DD9;--blue-bg:#EAF0FD;
+  --sh:0 1px 3px rgba(26,23,20,0.07),0 4px 14px rgba(26,23,20,0.05);
+  --sh2:0 2px 8px rgba(26,23,20,0.1),0 8px 24px rgba(26,23,20,0.08);
+  --sidebar:220px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:'Jost',sans-serif;font-weight:300;display:flex;min-height:100vh;overflow-x:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--w);border-right:1px solid var(--bdr2);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:50;
+}
+.sb-logo{
+  padding:20px 20px 16px;border-bottom:1px solid var(--bdr);
+  display:flex;align-items:center;gap:10px;
+}
+.sb-logo-mark{width:28px;height:28px;flex-shrink:0}
+.sb-brand{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;letter-spacing:0.1em;line-height:1.2}
+.sb-brand span{color:var(--gold);display:block;font-size:10px;letter-spacing:0.22em;font-weight:400}
+.sb-user{padding:14px 20px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px}
+.sb-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8B6020);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500;flex-shrink:0}
+.sb-uname{font-size:12px;font-weight:400;color:var(--t)}
+.sb-urole{font-size:10px;color:var(--mu)}
+.sb-nav{flex:1;padding:12px 0;overflow-y:auto}
+.sb-section{font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);padding:12px 20px 6px}
+.sb-link{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 20px;cursor:pointer;
+  font-size:12px;font-weight:400;letter-spacing:0.04em;color:var(--t2);
+  border-left:2px solid transparent;
+  transition:all 0.2s;text-decoration:none;
+}
+.sb-link:hover{background:var(--gold-bg);color:var(--gold)}
+.sb-link.active{background:var(--gold-bg);color:var(--gold);border-left-color:var(--gold);font-weight:500}
+.sb-link .ico{font-size:14px;width:16px;text-align:center}
+.sb-badge{margin-left:auto;background:var(--gold);color:#fff;font-size:9px;font-weight:500;border-radius:10px;padding:1px 6px}
+.sb-footer{padding:14px 20px;border-top:1px solid var(--bdr);font-size:10px;color:var(--mu);letter-spacing:0.06em}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--w);border-bottom:1px solid var(--bdr2);
+  padding:0 32px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:40;
+}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--t)}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:2px;border:none;cursor:pointer;
+  font-family:'Jost',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.1em;
+  transition:all 0.2s;text-transform:uppercase;
+}
+.btn-primary{background:var(--gold);color:#fff}
+.btn-primary:hover{background:var(--gold-l)}
+.btn-outline{background:transparent;color:var(--gold);border:1px solid var(--bdr2)}
+.btn-outline:hover{background:var(--gold-bg)}
+.btn-ghost{background:transparent;color:var(--mu);border:1px solid var(--bdr)}
+.btn-ghost:hover{background:var(--bg);color:var(--t)}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(192,57,43,0.2)}
+.btn-danger:hover{background:#fad7d4}
+.search-bar{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg);border:1px solid var(--bdr);padding:6px 12px;
+  border-radius:2px;min-width:200px;
+}
+.search-bar input{border:none;background:transparent;font-family:'Jost',sans-serif;font-size:12px;color:var(--t);outline:none;width:100%}
+.search-bar input::placeholder{color:var(--mu)}
+
+/* ── CONTENT ── */
+.content{flex:1;padding:28px 32px;overflow-y:auto}
+.page{display:none}
+.page.active{display:block}
+
+/* ── STAT CARDS ── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat-card{
+  background:var(--w);border:1px solid var(--bdr);padding:18px 20px;
+  border-radius:2px;border-top:3px solid transparent;
+}
+.stat-card.gold{border-top-color:var(--gold)}
+.stat-card.green{border-top-color:var(--green)}
+.stat-card.orange{border-top-color:var(--orange)}
+.stat-card.blue{border-top-color:var(--blue)}
+.stat-label{font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--t);line-height:1}
+.stat-sub{font-size:10px;color:var(--mu);margin-top:4px}
+.stat-trend{font-size:10px;margin-top:6px}
+.trend-up{color:var(--green)}
+.trend-warn{color:var(--orange)}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--t)}
+.sec-sub{font-size:11px;color:var(--mu);margin-top:2px}
+
+/* ── PROJECT CARDS ── */
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.proj-card{
+  background:var(--w);border:1px solid var(--bdr);padding:20px;
+  border-radius:2px;cursor:pointer;transition:box-shadow 0.2s,transform 0.2s;
+  border-top:3px solid var(--gold-pale);
+}
+.proj-card:hover{box-shadow:var(--sh2);transform:translateY(-2px);border-top-color:var(--gold)}
+.proj-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.proj-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;color:var(--t);line-height:1.25}
+.proj-client{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin:4px 0 12px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;padding:3px 8px;border-radius:2px}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-orange{background:var(--orange-bg);color:var(--orange)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-gold{background:var(--gold-bg);color:var(--gold)}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.prog-bar{height:3px;background:var(--bg2);border-radius:2px;margin:10px 0 6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;background:var(--gold);transition:width 1s ease}
+.proj-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--mu)}
+.proj-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--bdr)}
+.proj-avatars{display:flex}
+.proj-av{width:22px;height:22px;border-radius:50%;background:var(--gold-bg);border:2px solid var(--w);margin-left:-6px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--gold);font-weight:500}
+.proj-av:first-child{margin-left:0}
+.proj-tasks{font-size:10px;color:var(--mu)}
+
+/* ── TABLE ── */
+.table-wrap{background:var(--w);border:1px solid var(--bdr);border-radius:2px;overflow:hidden;margin-bottom:28px}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--gold-bg);border-bottom:1px solid var(--bdr2)}
+th{padding:10px 14px;text-align:left;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);font-weight:400}
+tbody tr{border-bottom:1px solid var(--bdr);transition:background 0.15s;cursor:pointer}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--gold-bg)}
+td{padding:11px 14px;font-size:12px;color:var(--t2);vertical-align:middle}
+.td-name{font-weight:400;color:var(--t)}
+.td-actions{display:flex;gap:6px}
+.icon-btn{width:28px;height:28px;border:1px solid var(--bdr);background:transparent;border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--mu);transition:all 0.15s}
+.icon-btn:hover{background:var(--gold-bg);border-color:var(--bdr2);color:var(--gold)}
+.icon-btn.danger:hover{background:var(--red-bg);border-color:rgba(192,57,43,0.3);color:var(--red)}
+
+/* ── TASK BOARD ── */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.board-col{background:var(--bg);border:1px solid var(--bdr);border-radius:2px}
+.board-col-hdr{padding:12px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.board-col-title{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase}
+.board-col-count{font-size:10px;background:var(--w);border:1px solid var(--bdr);border-radius:10px;padding:1px 7px;color:var(--mu)}
+.board-cards{padding:10px;display:flex;flex-direction:column;gap:8px;min-height:100px}
+.task-card{
+  background:var(--w);border:1px solid var(--bdr);padding:12px;
+  border-radius:2px;cursor:grab;transition:box-shadow 0.2s;
+  border-left:3px solid transparent;
+}
+.task-card:hover{box-shadow:var(--sh)}
+.task-card.prio-high{border-left-color:var(--red)}
+.task-card.prio-med{border-left-color:var(--orange)}
+.task-card.prio-low{border-left-color:var(--green)}
+.task-title{font-size:12px;font-weight:400;color:var(--t);margin-bottom:6px;line-height:1.3}
+.task-meta{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--mu)}
+.task-proj{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold)}
+
+/* ── CALENDAR ── */
+.cal-wrap{background:var(--w);border:1px solid var(--bdr);border-radius:2px;overflow:hidden;margin-bottom:28px}
+.cal-hdr{padding:14px 20px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.cal-month{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300}
+.cal-nav{display:flex;gap:6px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-dow{padding:8px;text-align:center;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--bdr)}
+.cal-day{
+  min-height:72px;padding:6px;border-right:1px solid var(--bdr);
+  border-bottom:1px solid var(--bdr);
+  font-size:11px;color:var(--mu);
+}
+.cal-day:nth-child(7n){border-right:none}
+.cal-day.today{background:var(--gold-bg)}
+.cal-day.today .cal-dn{color:var(--gold);font-weight:500}
+.cal-day.other-month{opacity:0.35}
+.cal-dn{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;margin-bottom:4px}
+.cal-event{font-size:9px;padding:2px 5px;border-radius:2px;margin-bottom:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── KPI ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:28px}
+.kpi-card{background:var(--w);border:1px solid var(--bdr);padding:20px;border-radius:2px}
+.kpi-title{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--mu);margin-bottom:12px}
+.kpi-chart{display:flex;align-items:flex-end;gap:4px;height:60px;margin-bottom:8px}
+.kpi-bar{flex:1;background:var(--gold-pale);border-radius:2px 2px 0 0;transition:background 0.2s}
+.kpi-bar:hover{background:var(--gold)}
+.kpi-bar-label{font-size:8px;color:var(--mu);text-align:center;margin-top:3px}
+.kpi-total{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--t)}
+.kpi-total span{font-size:14px;color:var(--gold)}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(26,23,20,0.4);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--w);border:1px solid var(--bdr2);border-radius:2px;width:540px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:var(--sh2);animation:modalIn 0.25s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.modal-hdr{padding:20px 24px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400}
+.modal-close{width:28px;height:28px;border:1px solid var(--bdr);background:transparent;border-radius:2px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all 0.15s}
+.modal-close:hover{background:var(--red-bg);color:var(--red);border-color:rgba(192,57,43,0.3)}
+.modal-body{padding:24px}
+.form-row{margin-bottom:16px}
+.form-row label{display:block;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.form-row input,.form-row select,.form-row textarea{
+  width:100%;padding:9px 12px;
+  border:1px solid var(--bdr2);border-radius:2px;
+  background:var(--bg);color:var(--t);
+  font-family:'Jost',sans-serif;font-size:13px;font-weight:300;
+  outline:none;transition:border-color 0.2s;
+}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--gold);background:var(--w)}
+.form-row textarea{resize:vertical;min-height:80px}
+.form-row select{cursor:pointer}
+.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:flex-end;gap:10px}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:48px 24px;color:var(--mu)}
+.empty-icon{font-size:36px;margin-bottom:12px;opacity:0.4}
+.empty-text{font-size:13px;line-height:1.6}
+
+/* ── ANNUAIRE ── */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.team-card{background:var(--w);border:1px solid var(--bdr);padding:20px;border-radius:2px;text-align:center}
+.team-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8B6020);display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:300;margin:0 auto 12px}
+.team-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;color:var(--t);margin-bottom:3px}
+.team-role{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.team-email{font-size:11px;color:var(--mu)}
+.team-proj{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:10px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--t);color:var(--w);padding:12px 18px;border-radius:2px;font-size:12px;z-index:999;transform:translateY(60px);opacity:0;transition:all 0.3s;border-left:3px solid var(--gold)}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.filter-select{padding:6px 10px;border:1px solid var(--bdr);border-radius:2px;background:var(--w);font-family:'Jost',sans-serif;font-size:11px;color:var(--t2);outline:none;cursor:pointer}
+.filter-select:focus{border-color:var(--gold)}
+
+/* ── DOC LIST ── */
+.doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.doc-card{background:var(--w);border:1px solid var(--bdr);padding:16px;border-radius:2px;cursor:pointer;transition:box-shadow 0.2s}
+.doc-card:hover{box-shadow:var(--sh)}
+.doc-icon-wrap{width:40px;height:48px;background:var(--gold-bg);border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:0.06em;color:var(--gold);font-weight:500;margin-bottom:10px}
+.doc-name{font-size:13px;font-weight:400;color:var(--t);line-height:1.3;margin-bottom:4px}
+.doc-meta{font-size:10px;color:var(--mu)}
+.doc-proj-tag{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-top:6px}
+
+/* scroll tweaks */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <svg class="sb-logo-mark" viewBox="0 0 28 28" fill="none">
+      <path d="M16 5C10.477 5 6 9.477 6 15C6 20.523 10.477 25 16 25" stroke="#B8843A" stroke-width="2" stroke-linecap="round"/>
+      <path d="M16 5C16 5 23 7 23 15C23 19 21.2 22 17.5 23.5" stroke="#1A1714" stroke-width="2" stroke-linecap="round"/>
+      <path d="M18 15H23" stroke="#1A1714" stroke-width="2" stroke-linecap="round"/>
+      <path d="M20 15L23.5 22" stroke="#1A1714" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="sb-brand">RYLNA <span>CONSULTING</span></div>
+  </div>
+
+  <div class="sb-user">
+    <div class="sb-avatar">RC</div>
+    <div>
+      <div class="sb-uname">Rylna Consulting</div>
+      <div class="sb-urole">Administrateur</div>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-section">Navigation</div>
+    <a class="sb-link active" onclick="nav('dashboard')"><span class="ico">◈</span> Tableau de bord</a>
+    <a class="sb-link" onclick="nav('projets')"><span class="ico">◎</span> Projets <span class="sb-badge" id="proj-badge">3</span></a>
+    <a class="sb-link" onclick="nav('taches')"><span class="ico">◻</span> Tâches <span class="sb-badge" id="task-badge">8</span></a>
+    <a class="sb-link" onclick="nav('documents')"><span class="ico">◑</span> Documents <span class="sb-badge" id="doc-badge">7</span></a>
+    <div class="sb-section">Ressources</div>
+    <a class="sb-link" onclick="nav('equipe')"><span class="ico">◉</span> Équipe</a>
+    <a class="sb-link" onclick="nav('calendrier')"><span class="ico">▣</span> Calendrier</a>
+    <div class="sb-section">Analyse</div>
+    <a class="sb-link" onclick="nav('rapports')"><span class="ico">◐</span> Rapports & KPIs</a>
+  </nav>
+
+  <div class="sb-footer">Espace de gestion v1.0</div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar" id="topbar">
+    <div class="topbar-title" id="page-title">Tableau de bord</div>
+    <div class="topbar-actions">
+      <div class="search-bar"><span style="color:var(--mu);font-size:12px">⌕</span><input type="text" placeholder="Rechercher…" oninput="globalSearch(this.value)"></div>
+      <button class="btn btn-primary" id="add-btn" onclick="openAddModal()">+ Ajouter</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="stat-row">
+        <div class="stat-card gold">
+          <div class="stat-label">Projets actifs</div>
+          <div class="stat-val" id="stat-projs">3</div>
+          <div class="stat-sub">OPT NC — Calédonie</div>
+          <div class="stat-trend trend-up">↑ En bonne marche</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Tâches en cours</div>
+          <div class="stat-val" id="stat-tasks">8</div>
+          <div class="stat-sub">Sur 3 projets</div>
+          <div class="stat-trend trend-up">↑ 2 terminées cette semaine</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-label">Documents</div>
+          <div class="stat-val" id="stat-docs">7</div>
+          <div class="stat-sub">Tous projets confondus</div>
+          <div class="stat-trend trend-warn">⚠ 1 à valider</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-label">Membres équipe</div>
+          <div class="stat-val">4</div>
+          <div class="stat-sub">Actifs ce mois</div>
+          <div class="stat-trend trend-up">↑ 3 en ligne</div>
+        </div>
+      </div>
+
+      <div class="sec-hdr">
+        <div><div class="sec-title">Projets récents</div><div class="sec-sub">Dernière activité</div></div>
+        <button class="btn btn-outline" onclick="nav('projets')">Voir tous →</button>
+      </div>
+      <div class="proj-grid" id="dash-proj-grid"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div>
+          <div class="sec-hdr"><div class="sec-title">Tâches prioritaires</div><button class="btn btn-outline" onclick="nav('taches')">Voir toutes →</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Tâche</th><th>Projet</th><th>Priorité</th><th>Échéance</th></tr></thead>
+              <tbody id="dash-tasks"></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="sec-hdr"><div class="sec-title">Documents récents</div><button class="btn btn-outline" onclick="nav('documents')">Voir tous →</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Fichier</th><th>Projet</th><th>Date</th></tr></thead>
+              <tbody id="dash-docs"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROJETS ═══ -->
+    <div class="page" id="page-projets">
+      <div class="filter-bar">
+        <select class="filter-select" onchange="filterProjects(this.value)">
+          <option value="">Tous les statuts</option>
+          <option value="En cours">En cours</option>
+          <option value="Initialisation">Initialisation</option>
+          <option value="Terminé">Terminé</option>
+          <option value="En pause">En pause</option>
+        </select>
+      </div>
+      <div class="proj-grid" id="proj-grid"></div>
+    </div>
+
+    <!-- ═══ TÂCHES ═══ -->
+    <div class="page" id="page-taches">
+      <div class="filter-bar">
+        <select class="filter-select" id="task-filter-proj" onchange="renderTasks()">
+          <option value="">Tous les projets</option>
+        </select>
+        <select class="filter-select" onchange="filterTasksByPrio(this.value)">
+          <option value="">Toutes priorités</option>
+          <option value="Haute">Haute</option>
+          <option value="Moyenne">Moyenne</option>
+          <option value="Basse">Basse</option>
+        </select>
+      </div>
+      <div class="board" id="task-board"></div>
+    </div>
+
+    <!-- ═══ DOCUMENTS ═══ -->
+    <div class="page" id="page-documents">
+      <div class="filter-bar">
+        <select class="filter-select" onchange="filterDocs(this.value)">
+          <option value="">Tous les projets</option>
+          <option value="SI Convergence OPT NC">SI Convergence OPT NC</option>
+          <option value="CRM & Inventaire">CRM & Inventaire</option>
+          <option value="Charging System">Charging System</option>
+        </select>
+        <select class="filter-select" onchange="filterDocsByType(this.value)">
+          <option value="">Tous les types</option>
+          <option value="PDF">PDF</option>
+          <option value="DOC">Word</option>
+          <option value="XLS">Excel</option>
+          <option value="PPT">PowerPoint</option>
+        </select>
+      </div>
+      <div class="doc-grid" id="doc-grid"></div>
+    </div>
+
+    <!-- ═══ ÉQUIPE ═══ -->
+    <div class="page" id="page-equipe">
+      <div class="team-grid" id="team-grid"></div>
+    </div>
+
+    <!-- ═══ CALENDRIER ═══ -->
+    <div class="page" id="page-calendrier">
+      <div class="cal-wrap">
+        <div class="cal-hdr">
+          <div class="cal-month" id="cal-title">Juin 2026</div>
+          <div class="cal-nav">
+            <button class="btn btn-ghost" onclick="calNav(-1)">‹</button>
+            <button class="btn btn-ghost" onclick="calNav(1)">›</button>
+          </div>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-dow">Lun</div><div class="cal-dow">Mar</div><div class="cal-dow">Mer</div>
+          <div class="cal-dow">Jeu</div><div class="cal-dow">Ven</div><div class="cal-dow">Sam</div><div class="cal-dow">Dim</div>
+        </div>
+        <div class="cal-grid" id="cal-days" style="border-top:1px solid var(--bdr)"></div>
+      </div>
+    </div>
+
+    <!-- ═══ RAPPORTS ═══ -->
+    <div class="page" id="page-rapports">
+      <div class="stat-row">
+        <div class="stat-card gold"><div class="stat-label">Tâches complétées</div><div class="stat-val" id="kpi-done">0</div><div class="stat-sub">Ce mois</div></div>
+        <div class="stat-card green"><div class="stat-label">Taux avancement moyen</div><div class="stat-val" id="kpi-avg">0<span style="font-size:18px">%</span></div><div class="stat-sub">Tous projets</div></div>
+        <div class="stat-card orange"><div class="stat-label">Documents partagés</div><div class="stat-val" id="kpi-docs2">0</div><div class="stat-sub">Total</div></div>
+        <div class="stat-card blue"><div class="stat-label">Tâches en retard</div><div class="stat-val" id="kpi-late">0</div><div class="stat-sub">À traiter</div></div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Avancement projets</div>
+          <div id="proj-kpi-chart"></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Répartition tâches par statut</div>
+          <div id="task-kpi-chart"></div>
+        </div>
+      </div>
+      <div class="sec-hdr"><div class="sec-title">Détail par projet</div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Projet</th><th>Client</th><th>Statut</th><th>Avancement</th><th>Tâches</th><th>Documents</th></tr></thead>
+          <tbody id="rapport-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══ MODALS ═══ -->
+<!-- Projet -->
+<div class="overlay" id="modal-projet">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title" id="proj-modal-title">Nouveau projet</div><button class="modal-close" onclick="closeModal('modal-projet')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Nom du projet *</label><input id="proj-name" type="text" placeholder="Ex : Refonte SI Client"></div>
+      <div class="form-row"><label>Client *</label><input id="proj-client" type="text" placeholder="Ex : OPT Nouvelle-Calédonie"></div>
+      <div class="form-2col">
+        <div class="form-row"><label>Statut</label><select id="proj-status"><option>En cours</option><option>Initialisation</option><option>En pause</option><option>Terminé</option></select></div>
+        <div class="form-row"><label>Avancement (%)</label><input id="proj-prog" type="number" min="0" max="100" value="0"></div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row"><label>Date début</label><input id="proj-start" type="date"></div>
+        <div class="form-row"><label>Date fin prévue</label><input id="proj-end" type="date"></div>
+      </div>
+      <div class="form-row"><label>Description</label><textarea id="proj-desc" placeholder="Décrivez le projet…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-projet')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveProject()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tâche -->
+<div class="overlay" id="modal-tache">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title" id="task-modal-title">Nouvelle tâche</div><button class="modal-close" onclick="closeModal('modal-tache')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Titre *</label><input id="task-title-input" type="text" placeholder="Ex : Rédiger le cahier des charges"></div>
+      <div class="form-2col">
+        <div class="form-row"><label>Projet *</label><select id="task-proj-sel"></select></div>
+        <div class="form-row"><label>Assigné à</label><select id="task-assign"><option>Rylna Consulting</option><option>Responsable Lot 1</option><option>Expert EC</option><option>Manager Lot 3</option></select></div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row"><label>Priorité</label><select id="task-prio"><option>Haute</option><option>Moyenne</option><option>Basse</option></select></div>
+        <div class="form-row"><label>Échéance</label><input id="task-due" type="date"></div>
+      </div>
+      <div class="form-row"><label>Description</label><textarea id="task-desc" placeholder="Détails de la tâche…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-tache')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveTask()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Document -->
+<div class="overlay" id="modal-doc">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title">Ajouter un document</div><button class="modal-close" onclick="closeModal('modal-doc')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Nom du fichier *</label><input id="doc-name-input" type="text" placeholder="Ex : Cahier des charges v2.pdf"></div>
+      <div class="form-2col">
+        <div class="form-row"><label>Projet *</label><select id="doc-proj-sel"></select></div>
+        <div class="form-row"><label>Type</label><select id="doc-type"><option>PDF</option><option>DOC</option><option>XLS</option><option>PPT</option><option>ZIP</option></select></div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row"><label>Taille</label><input id="doc-size" type="text" placeholder="Ex : 1.2 Mo"></div>
+        <div class="form-row"><label>Version</label><input id="doc-ver" type="text" placeholder="Ex : v1.0"></div>
+      </div>
+      <div class="form-row"><label>Description</label><textarea id="doc-desc" placeholder="Description du document…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-doc')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveDoc()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA STORE
+// ═══════════════════════════════════════════════════
+let projects = [
+  {id:1,name:'SI Convergence OPT NC',client:'OPT Nouvelle-Calédonie',status:'En cours',progress:45,start:'2026-01-15',end:'2026-12-31',desc:'Administration et coordination du système d\'information convergence pour OPT NC. Lot 1 — Coordination & Architecture.'},
+  {id:2,name:'CRM & Inventaire',client:'OPT NC — Lot 3',status:'En cours',progress:30,start:'2026-02-01',end:'2026-11-30',desc:'Administration du CRM et du système d\'inventaire convergence. Lot 3 — EAI/EDR.'},
+  {id:3,name:'Charging System',client:'OPT NC — Lot 1',status:'Initialisation',progress:12,start:'2026-03-01',end:'2026-12-31',desc:'Administration du Charging System du SI Convergence. Phase d\'initialisation et de cadrage.'}
+];
+
+let tasks = [
+  {id:1,title:'Rédiger cahier des charges Lot 1',project:'SI Convergence OPT NC',assignee:'Responsable Lot 1',priority:'Haute',due:'2026-06-10',status:'En cours',desc:''},
+  {id:2,title:'Validation architecture solution',project:'SI Convergence OPT NC',assignee:'Rylna Consulting',priority:'Haute',due:'2026-06-15',status:'En cours',desc:''},
+  {id:3,title:'Paramétrage CRM initial',project:'CRM & Inventaire',assignee:'Manager Lot 3',priority:'Moyenne',due:'2026-06-20',status:'À faire',desc:''},
+  {id:4,title:'Mapping EAI/EDR des flux',project:'CRM & Inventaire',assignee:'Expert EC',priority:'Moyenne',due:'2026-06-25',status:'À faire',desc:''},
+  {id:5,title:'Réunion de lancement Charging',project:'Charging System',assignee:'Rylna Consulting',priority:'Haute',due:'2026-06-05',status:'Terminé',desc:''},
+  {id:6,title:'Recueil des besoins client',project:'Charging System',assignee:'Responsable Lot 1',priority:'Basse',due:'2026-07-01',status:'À faire',desc:''},
+  {id:7,title:'Revue proposition commerciale REF01',project:'SI Convergence OPT NC',assignee:'Rylna Consulting',priority:'Haute',due:'2026-06-08',status:'En révision',desc:''},
+  {id:8,title:'Tests intégration EAI',project:'CRM & Inventaire',assignee:'Expert EC',priority:'Basse',due:'2026-07-15',status:'À faire',desc:''}
+];
+
+let documents = [
+  {id:1,name:'Proposition Commerciale OPTNC REF 01',project:'SI Convergence OPT NC',type:'PDF',size:'1.2 Mo',version:'v1.0',date:'2026-05-14',desc:'Proposition commerciale initiale transmise à OPT NC.'},
+  {id:2,name:'Convention Sous-Traitance RYLNA',project:'SI Convergence OPT NC',type:'DOC',size:'340 Ko',version:'v2.1',date:'2026-05-10',desc:'Convention de sous-traitance signée avec les prestataires.'},
+  {id:3,name:'Architecture Solution Convergence',project:'SI Convergence OPT NC',type:'PDF',size:'2.8 Mo',version:'v1.0',date:'2026-05-05',desc:'Document d\'architecture de la solution de convergence.'},
+  {id:4,name:'Administration CRM & Inventaire',project:'CRM & Inventaire',type:'PDF',size:'1.6 Mo',version:'v1.0',date:'2026-05-02',desc:'Guide d\'administration du CRM et du système d\'inventaire.'},
+  {id:5,name:'Administration Charging System',project:'Charging System',type:'PDF',size:'2.1 Mo',version:'v1.0',date:'2026-04-28',desc:'Guide d\'administration du Charging System convergence.'},
+  {id:6,name:'Coordination & Architecture SI',project:'Charging System',type:'PDF',size:'1.9 Mo',version:'v1.0',date:'2026-04-20',desc:'Document de coordination et architecture de la solution SI.'},
+  {id:7,name:'SI Telecom OPT — Référentiel',project:'SI Convergence OPT NC',type:'PDF',size:'3.4 Mo',version:'v1.0',date:'2026-04-15',desc:'Référentiel technique SI Telecom OPT.'}
+];
+
+let team = [
+  {id:1,name:'Rylna Consulting',role:'Direction',initials:'RC',email:'contact@rylna.fr',projects:['SI Convergence OPT NC','CRM & Inventaire','Charging System']},
+  {id:2,name:'Responsable Lot 1',role:'Coordination & Architecture',initials:'L1',email:'lot1@rylna.fr',projects:['SI Convergence OPT NC','Charging System']},
+  {id:3,name:'Expert EC',role:'Lot 2 — Spécialiste EC',initials:'EC',email:'ec@rylna.fr',projects:['CRM & Inventaire']},
+  {id:4,name:'Manager Lot 3',role:'CRM / EAI / EDR',initials:'MG',email:'manager@rylna.fr',projects:['CRM & Inventaire']}
+];
+
+let calYear=2026, calMonth=5; // June = index 5
+let editingProjId=null, editingTaskId=null;
+let currentPage='dashboard';
+
+const taskStatuses=['À faire','En cours','En révision','Terminé'];
+const prioMap={Haute:'high',Moyenne:'med',Basse:'low'};
+const badgeStatus=(s)=>{
+  if(s==='En cours') return 'badge-green';
+  if(s==='Terminé') return 'badge-blue';
+  if(s==='En pause') return 'badge-red';
+  return 'badge-orange';
+};
+
+// ═══ NAV ═══
+function nav(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const links=document.querySelectorAll('.sb-link');
+  links.forEach(l=>{if(l.getAttribute('onclick')&&l.getAttribute('onclick').includes("'"+page+"'"))l.classList.add('active')});
+  const titles={dashboard:'Tableau de bord',projets:'Projets',taches:'Tâches',documents:'Documents',equipe:'Équipe',calendrier:'Calendrier',rapports:'Rapports & KPIs'};
+  document.getElementById('page-title').textContent=titles[page]||page;
+  const addLabels={dashboard:'+ Ajouter',projets:'+ Projet',taches:'+ Tâche',documents:'+ Document',equipe:'+ Membre',calendrier:'+ Événement',rapports:'Exporter'};
+  document.getElementById('add-btn').textContent=addLabels[page]||'+ Ajouter';
+  currentPage=page;
+  renderPage(page);
+}
+
+function openAddModal(){
+  if(currentPage==='projets'||currentPage==='dashboard') openProjModal();
+  else if(currentPage==='taches') openTaskModal();
+  else if(currentPage==='documents') openDocModal();
+  else showToast('Fonctionnalité bientôt disponible');
+}
+
+// ═══ RENDER ═══
+function renderPage(p){
+  if(p==='dashboard') renderDashboard();
+  if(p==='projets') renderProjects(projects);
+  if(p==='taches') renderTasks();
+  if(p==='documents') renderDocs(documents);
+  if(p==='equipe') renderTeam();
+  if(p==='calendrier') renderCal();
+  if(p==='rapports') renderReports();
+}
+
+// ── DASHBOARD ──
+function renderDashboard(){
+  // mini proj cards
+  const g=document.getElementById('dash-proj-grid');
+  g.innerHTML=projects.slice(0,3).map(p=>projCardHTML(p)).join('');
+  // tasks table
+  const tb=document.getElementById('dash-tasks');
+  tb.innerHTML=tasks.filter(t=>t.status!=='Terminé').slice(0,5).map(t=>`
+    <tr onclick="nav('taches')">
+      <td class="td-name">${t.title}</td>
+      <td><span style="font-size:10px;color:var(--gold)">${t.project.split(' ').slice(0,2).join(' ')}</span></td>
+      <td><span class="badge ${t.priority==='Haute'?'badge-red':t.priority==='Moyenne'?'badge-gold':'badge-green'}">${t.priority}</span></td>
+      <td>${t.due}</td>
+    </tr>`).join('');
+  const db=document.getElementById('dash-docs');
+  db.innerHTML=documents.slice(0,5).map(d=>`
+    <tr>
+      <td class="td-name" style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:9px;color:var(--gold);background:var(--gold-bg);border:1px solid var(--bdr);padding:2px 5px">${d.type}</span>${d.name.length>32?d.name.slice(0,32)+'…':d.name}
+      </td>
+      <td><span style="font-size:10px;color:var(--gold)">${d.project.split(' ').slice(0,2).join(' ')}</span></td>
+      <td>${d.date}</td>
+    </tr>`).join('');
+  updateStats();
+}
+
+function updateStats(){
+  document.getElementById('stat-projs').textContent=projects.length;
+  document.getElementById('stat-tasks').textContent=tasks.filter(t=>t.status!=='Terminé').length;
+  document.getElementById('stat-docs').textContent=documents.length;
+  document.getElementById('proj-badge').textContent=projects.length;
+  document.getElementById('task-badge').textContent=tasks.filter(t=>t.status!=='Terminé').length;
+  document.getElementById('doc-badge').textContent=documents.length;
+}
+
+// ── PROJECTS ──
+function projCardHTML(p){
+  const taskCount=tasks.filter(t=>t.project===p.name).length;
+  const doneCount=tasks.filter(t=>t.project===p.name&&t.status==='Terminé').length;
+  const members=[...new Set(tasks.filter(t=>t.project===p.name).map(t=>t.assignee))];
+  return `<div class="proj-card" onclick="openProjModal(${p.id})">
+    <div class="proj-header">
+      <div>
+        <div class="proj-name">${p.name}</div>
+        <div class="proj-client">${p.client}</div>
+      </div>
+      <span class="badge ${badgeStatus(p.status)}"><span class="badge-dot"></span>${p.status}</span>
+    </div>
+    <div style="font-size:11px;color:var(--mu);line-height:1.5;margin-bottom:10px">${p.desc.slice(0,90)}…</div>
+    <div class="prog-bar"><div class="prog-fill" style="width:${p.progress}%"></div></div>
+    <div class="proj-meta"><span>${p.progress}% avancé</span><span>Fin : ${p.end||'—'}</span></div>
+    <div class="proj-footer">
+      <div class="proj-avatars">${members.slice(0,3).map(m=>`<div class="proj-av">${m.slice(0,2).toUpperCase()}</div>`).join('')}</div>
+      <div class="proj-tasks">${doneCount}/${taskCount} tâches</div>
+    </div>
+  </div>`;
+}
+
+function renderProjects(list){
+  document.getElementById('proj-grid').innerHTML=list.length?list.map(projCardHTML).join(''):`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">◎</div><div class="empty-text">Aucun projet.<br>Cliquez sur "+ Projet" pour commencer.</div></div>`;
+}
+
+function filterProjects(status){
+  renderProjects(status?projects.filter(p=>p.status===status):projects);
+}
+
+// ── TASKS ──
+function renderTasks(){
+  const projSel=document.getElementById('task-filter-proj');
+  if(projSel&&projSel.options.length<=1){
+    projects.forEach(p=>{const o=document.createElement('option');o.value=p.name;o.textContent=p.name;projSel.appendChild(o)});
+  }
+  const filterProj=projSel?projSel.value:'';
+  const filteredTasks=filterProj?tasks.filter(t=>t.project===filterProj):tasks;
+  const board=document.getElementById('task-board');
+  board.innerHTML=taskStatuses.map(status=>{
+    const cols=filteredTasks.filter(t=>t.status===status);
+    return `<div class="board-col">
+      <div class="board-col-hdr">
+        <span class="board-col-title" style="color:${statusColor(status)}">${status}</span>
+        <span class="board-col-count">${cols.length}</span>
+      </div>
+      <div class="board-cards">
+        ${cols.map(t=>`
+          <div class="task-card prio-${prioMap[t.priority]||'low'}" onclick="openTaskModal(${t.id})">
+            <div class="task-proj">${t.project.split(' ').slice(0,2).join(' ')}</div>
+            <div class="task-title">${t.title}</div>
+            <div class="task-meta">
+              <span>${t.assignee.split(' ')[0]}</span>
+              <span>${t.due||'—'}</span>
+            </div>
+          </div>`).join('')}
+        <button class="btn btn-ghost" style="width:100%;margin-top:4px;justify-content:center" onclick="openTaskModal(null,'${status}')">+ Tâche</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function statusColor(s){
+  if(s==='Terminé') return 'var(--green)';
+  if(s==='En cours') return 'var(--blue)';
+  if(s==='En révision') return 'var(--orange)';
+  return 'var(--mu)';
+}
+
+function filterTasksByPrio(p){
+  const list=p?tasks.filter(t=>t.priority===p):tasks;
+  const prevFilter=tasks;tasks=list;renderTasks();tasks=prevFilter;
+}
+
+// ── DOCUMENTS ──
+function renderDocs(list){
+  document.getElementById('doc-grid').innerHTML=list.length?list.map(d=>`
+    <div class="doc-card">
+      <div class="doc-icon-wrap">${d.type}</div>
+      <div class="doc-name">${d.name}</div>
+      <div class="doc-meta">${d.date} · ${d.size} · ${d.version}</div>
+      <div class="doc-proj-tag">${d.project}</div>
+      <div style="display:flex;gap:6px;margin-top:12px">
+        <button class="btn btn-outline" style="font-size:10px;padding:5px 10px">Voir</button>
+        <button class="btn btn-ghost" style="font-size:10px;padding:5px 10px" onclick="deleteDoc(${d.id})">Suppr.</button>
+      </div>
+    </div>`).join(''):`<div class="empty" style="grid-column:1/-1"><div class="empty-icon">◑</div><div class="empty-text">Aucun document.</div></div>`;
+}
+
+function filterDocs(proj){renderDocs(proj?documents.filter(d=>d.project===proj):documents)}
+function filterDocsByType(type){renderDocs(type?documents.filter(d=>d.type===type):documents)}
+
+function deleteDoc(id){
+  documents=documents.filter(d=>d.id!==id);
+  renderDocs(documents);updateStats();showToast('Document supprimé');
+}
+
+// ── TEAM ──
+function renderTeam(){
+  document.getElementById('team-grid').innerHTML=team.map(m=>`
+    <div class="team-card">
+      <div class="team-av">${m.initials}</div>
+      <div class="team-name">${m.name}</div>
+      <div class="team-role">${m.role}</div>
+      <div class="team-email">${m.email}</div>
+      <div class="team-proj">${m.projects.map(p=>`<span class="badge badge-gold">${p.split(' ').slice(0,2).join(' ')}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+// ── CALENDAR ──
+const calEvents=[
+  {date:'2026-06-05',label:'Lancement Charging',color:'var(--gold-bg)',textColor:'var(--gold)'},
+  {date:'2026-06-10',label:'Livrables Lot 1',color:'var(--blue-bg)',textColor:'var(--blue)'},
+  {date:'2026-06-15',label:'Revue architecture',color:'var(--green-bg)',textColor:'var(--green)'},
+  {date:'2026-06-20',label:'Paramétrage CRM',color:'var(--orange-bg)',textColor:'var(--orange)'},
+  {date:'2026-06-25',label:'Mapping EAI/EDR',color:'var(--blue-bg)',textColor:'var(--blue)'},
+  {date:'2026-06-30',label:'Revue mensuelle',color:'var(--gold-bg)',textColor:'var(--gold)'},
+];
+
+function renderCal(){
+  const months=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  document.getElementById('cal-title').textContent=months[calMonth]+' '+calYear;
+  const first=new Date(calYear,calMonth,1);
+  let dow=first.getDay();dow=dow===0?6:dow-1;
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const daysInPrev=new Date(calYear,calMonth,0).getDate();
+  const today=new Date();
+  const grid=document.getElementById('cal-days');
+  let html='';
+  let total=Math.ceil((dow+daysInMonth)/7)*7;
+  for(let i=0;i<total;i++){
+    let day,month=calMonth,year=calYear,otherMonth=false;
+    if(i<dow){day=daysInPrev-dow+i+1;month=calMonth-1;otherMonth=true}
+    else if(i>=dow+daysInMonth){day=i-dow-daysInMonth+1;month=calMonth+1;otherMonth=true}
+    else day=i-dow+1;
+    const m=String(month+1).padStart(2,'0'),d=String(day).padStart(2,'0');
+    const dateStr=`${year}-${m}-${d}`;
+    const isToday=today.getDate()===day&&today.getMonth()===calMonth&&today.getFullYear()===calYear&&!otherMonth;
+    const evts=calEvents.filter(e=>e.date===dateStr);
+    html+=`<div class="cal-day${otherMonth?' other-month':''}${isToday?' today':''}">
+      <div class="cal-dn">${day}</div>
+      ${evts.map(e=>`<div class="cal-event" style="background:${e.color};color:${e.textColor}">${e.label}</div>`).join('')}
+    </div>`;
+  }
+  grid.innerHTML=html;
+}
+
+function calNav(dir){
+  calMonth+=dir;
+  if(calMonth>11){calMonth=0;calYear++}
+  if(calMonth<0){calMonth=11;calYear--}
+  renderCal();
+}
+
+// ── REPORTS ──
+function renderReports(){
+  const done=tasks.filter(t=>t.status==='Terminé').length;
+  const avg=projects.length?Math.round(projects.reduce((a,p)=>a+p.progress,0)/projects.length):0;
+  document.getElementById('kpi-done').textContent=done;
+  document.getElementById('kpi-avg').innerHTML=avg+'<span style="font-size:18px">%</span>';
+  document.getElementById('kpi-docs2').textContent=documents.length;
+  document.getElementById('kpi-late').textContent=tasks.filter(t=>t.due&&t.due<new Date().toISOString().slice(0,10)&&t.status!=='Terminé').length;
+  // proj chart
+  document.getElementById('proj-kpi-chart').innerHTML=`
+    <div style="display:flex;align-items:flex-end;gap:8px;height:80px;margin-bottom:8px">
+      ${projects.map(p=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="font-size:10px;color:var(--gold)">${p.progress}%</div>
+        <div style="width:100%;height:${p.progress*0.7}px;background:var(--gold);border-radius:2px 2px 0 0;min-height:4px"></div>
+        <div style="font-size:9px;color:var(--mu);text-align:center;line-height:1.2">${p.name.split(' ').slice(0,2).join(' ')}</div>
+      </div>`).join('')}
+    </div>`;
+  // task chart
+  const statCounts=taskStatuses.map(s=>({s,c:tasks.filter(t=>t.status===s).length}));
+  const maxC=Math.max(...statCounts.map(x=>x.c),1);
+  document.getElementById('task-kpi-chart').innerHTML=`
+    <div style="display:flex;align-items:flex-end;gap:8px;height:80px;margin-bottom:8px">
+      ${statCounts.map(x=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="font-size:10px;color:${statusColor(x.s)}">${x.c}</div>
+        <div style="width:100%;height:${(x.c/maxC)*60}px;background:${statusColor(x.s)};border-radius:2px 2px 0 0;min-height:4px;opacity:0.7"></div>
+        <div style="font-size:9px;color:var(--mu);text-align:center;line-height:1.2">${x.s}</div>
+      </div>`).join('')}
+    </div>`;
+  document.getElementById('rapport-table').innerHTML=projects.map(p=>{
+    const pt=tasks.filter(t=>t.project===p.name);
+    const pd=documents.filter(d=>d.project===p.name);
+    return `<tr>
+      <td class="td-name">${p.name}</td>
+      <td>${p.client}</td>
+      <td><span class="badge ${badgeStatus(p.status)}">${p.status}</span></td>
+      <td><div class="prog-bar" style="width:100px"><div class="prog-fill" style="width:${p.progress}%"></div></div><span style="font-size:10px;color:var(--mu)">${p.progress}%</span></td>
+      <td>${pt.length} (${pt.filter(t=>t.status==='Terminé').length} ✓)</td>
+      <td>${pd.length}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══ MODALS ═══
+function openProjModal(id){
+  editingProjId=id||null;
+  const p=id?projects.find(x=>x.id===id):null;
+  document.getElementById('proj-modal-title').textContent=p?'Modifier le projet':'Nouveau projet';
+  document.getElementById('proj-name').value=p?p.name:'';
+  document.getElementById('proj-client').value=p?p.client:'';
+  document.getElementById('proj-status').value=p?p.status:'En cours';
+  document.getElementById('proj-prog').value=p?p.progress:0;
+  document.getElementById('proj-start').value=p?p.start:'';
+  document.getElementById('proj-end').value=p?p.end:'';
+  document.getElementById('proj-desc').value=p?p.desc:'';
+  openModal('modal-projet');
+}
+
+function saveProject(){
+  const name=document.getElementById('proj-name').value.trim();
+  const client=document.getElementById('proj-client').value.trim();
+  if(!name||!client){showToast('Nom et client requis');return;}
+  const data={
+    name,client,
+    status:document.getElementById('proj-status').value,
+    progress:parseInt(document.getElementById('proj-prog').value)||0,
+    start:document.getElementById('proj-start').value,
+    end:document.getElementById('proj-end').value,
+    desc:document.getElementById('proj-desc').value
+  };
+  if(editingProjId){
+    const idx=projects.findIndex(p=>p.id===editingProjId);
+    projects[idx]={...projects[idx],...data};
+    showToast('Projet mis à jour');
+  } else {
+    projects.push({id:Date.now(),...data});
+    showToast('Projet créé');
+  }
+  closeModal('modal-projet');
+  renderProjects(projects);
+  updateStats();
+}
+
+function openTaskModal(id,defaultStatus){
+  editingTaskId=id||null;
+  const t=id?tasks.find(x=>x.id===id):null;
+  document.getElementById('task-modal-title').textContent=t?'Modifier la tâche':'Nouvelle tâche';
+  document.getElementById('task-title-input').value=t?t.title:'';
+  document.getElementById('task-prio').value=t?t.priority:'Haute';
+  document.getElementById('task-due').value=t?t.due:'';
+  document.getElementById('task-desc').value=t?t.desc:'';
+  document.getElementById('task-assign').value=t?t.assignee:'Rylna Consulting';
+  // populate proj select
+  const sel=document.getElementById('task-proj-sel');
+  sel.innerHTML=projects.map(p=>`<option value="${p.name}">${p.name}</option>`).join('');
+  if(t)sel.value=t.project;
+  openModal('modal-tache');
+}
+
+function saveTask(){
+  const title=document.getElementById('task-title-input').value.trim();
+  if(!title){showToast('Titre requis');return;}
+  const data={
+    title,
+    project:document.getElementById('task-proj-sel').value,
+    assignee:document.getElementById('task-assign').value,
+    priority:document.getElementById('task-prio').value,
+    due:document.getElementById('task-due').value,
+    status:editingTaskId?(tasks.find(t=>t.id===editingTaskId)||{}).status||'À faire':'À faire',
+    desc:document.getElementById('task-desc').value
+  };
+  if(editingTaskId){
+    const idx=tasks.findIndex(t=>t.id===editingTaskId);
+    tasks[idx]={...tasks[idx],...data};
+    showToast('Tâche mise à jour');
+  } else {
+    tasks.push({id:Date.now(),...data});
+    showToast('Tâche créée');
+  }
+  closeModal('modal-tache');
+  renderTasks();updateStats();
+}
+
+function openDocModal(){
+  const sel=document.getElementById('doc-proj-sel');
+  sel.innerHTML=projects.map(p=>`<option value="${p.name}">${p.name}</option>`).join('');
+  document.getElementById('doc-name-input').value='';
+  document.getElementById('doc-size').value='';
+  document.getElementById('doc-ver').value='v1.0';
+  document.getElementById('doc-desc').value='';
+  openModal('modal-doc');
+}
+
+function saveDoc(){
+  const name=document.getElementById('doc-name-input').value.trim();
+  if(!name){showToast('Nom requis');return;}
+  documents.push({
+    id:Date.now(),name,
+    project:document.getElementById('doc-proj-sel').value,
+    type:document.getElementById('doc-type').value,
+    size:document.getElementById('doc-size').value||'—',
+    version:document.getElementById('doc-ver').value,
+    date:new Date().toISOString().slice(0,10),
+    desc:document.getElementById('doc-desc').value
+  });
+  closeModal('modal-doc');
+  renderDocs(documents);updateStats();showToast('Document ajouté');
+}
+
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+
+// close on overlay click
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+
+// ═══ SEARCH ═══
+function globalSearch(q){
+  if(!q){renderPage(currentPage);return;}
+  const lq=q.toLowerCase();
+  if(currentPage==='projets') renderProjects(projects.filter(p=>p.name.toLowerCase().includes(lq)||p.client.toLowerCase().includes(lq)));
+  if(currentPage==='documents') renderDocs(documents.filter(d=>d.name.toLowerCase().includes(lq)||d.project.toLowerCase().includes(lq)));
+}
+
+// ═══ TOAST ═══
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ═══ INIT ═══
+renderDashboard();
+</script>
+</body>
+</html>
